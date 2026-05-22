@@ -1,0 +1,4 @@
+target/
+response.json
+payload.json
+dependency-reduced-pom.xml
