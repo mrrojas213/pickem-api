@@ -11,59 +11,72 @@ A serverless REST API built on AWS that powers a sports pick em league. Users pr
 
 ## Live API
 
-Base URL: `https://4jmed72tpd.execute-api.us-east-1.amazonaws.com/prod`
+Try the live leaderboard endpoint directly in your browser:
+
+`https://4jmed72tpd.execute-api.us-east-1.amazonaws.com/prod/leaderboard`
+
+All other endpoints accept POST requests and can be tested using PowerShell or Postman.
 
 ## Endpoints
 
-| Method | Endpoint | Description |
+| Method | Endpoint | Full URL |
 |---|---|---|
-| POST | /users | Register a new player |
-| POST | /games | Schedule a game |
-| POST | /picks | Submit a pick |
-| PUT | /games/{id}/score | Submit game result |
-| GET | /leaderboard | Get ranked standings |
+| POST | /users | `https://4jmed72tpd.execute-api.us-east-1.amazonaws.com/prod/users` |
+| POST | /games | `https://4jmed72tpd.execute-api.us-east-1.amazonaws.com/prod/games` |
+| POST | /picks | `https://4jmed72tpd.execute-api.us-east-1.amazonaws.com/prod/picks` |
+| GET | /leaderboard | `https://4jmed72tpd.execute-api.us-east-1.amazonaws.com/prod/leaderboard` |
 
-## Example Requests
+## Example Requests (PowerShell)
 
 **Create a user:**
-```json
-POST /users
-{
-  "username": "player1"
-}
+```powershell
+Invoke-WebRequest -Uri "https://4jmed72tpd.execute-api.us-east-1.amazonaws.com/prod/users" `
+  -Method POST `
+  -ContentType "application/json" `
+  -Body '{"username": "player1"}' `
+  -UseBasicParsing
 ```
 
 **Schedule a game:**
-```json
-POST /games
-{
-  "homeTeam": "Chargers",
-  "awayTeam": "49ers",
-  "gameDate": "2026-09-10",
-  "sport": "NFL"
-}
+```powershell
+Invoke-WebRequest -Uri "https://4jmed72tpd.execute-api.us-east-1.amazonaws.com/prod/games" `
+  -Method POST `
+  -ContentType "application/json" `
+  -Body '{"homeTeam": "Chargers", "awayTeam": "49ers", "gameDate": "2026-09-10", "sport": "NFL"}' `
+  -UseBasicParsing
 ```
 
 **Submit a pick:**
-```json
-POST /picks
-{
-  "userId": "your-user-id",
-  "gameId": "your-game-id",
-  "pickedTeam": "Chiefs"
-}
+```powershell
+Invoke-WebRequest -Uri "https://4jmed72tpd.execute-api.us-east-1.amazonaws.com/prod/picks" `
+  -Method POST `
+  -ContentType "application/json" `
+  -Body '{"userId": "your-user-id", "gameId": "your-game-id", "pickedTeam": "49ers"}' `
+  -UseBasicParsing
+```
+
+**Submit game result:**
+```powershell
+Invoke-WebRequest -Uri "https://4jmed72tpd.execute-api.us-east-1.amazonaws.com/prod/score" `
+  -Method POST `
+  -ContentType "application/json" `
+  -Body '{"gameId": "your-game-id", "winner": "49ers"}' `
+  -UseBasicParsing
 ```
 
 **Get leaderboard:**
-```json
-GET /leaderboard
+```powershell
+Invoke-WebRequest -Uri "https://4jmed72tpd.execute-api.us-east-1.amazonaws.com/prod/leaderboard" `
+  -Method GET `
+  -UseBasicParsing
 ```
 
 ## CI/CD Pipeline
 
 Every push to `main` triggers a GitHub Actions workflow that:
 1. Builds the project with Maven
-2. Deploys updated JAR to all Lambda functions automatically
+2. Runs tests
+3. Deploys updated JAR to all Lambda functions automatically
 
 ## Tech Stack
 
